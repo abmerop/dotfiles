@@ -1,0 +1,7 @@
+[user]
+	name = Matt Poremba
+	email = mrp5060@psu.edu
+[core]
+	editor = vim
+[merge]
+	tool = vimdiff
