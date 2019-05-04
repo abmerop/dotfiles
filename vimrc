@@ -1,91 +1,132 @@
-"fix mapleader
+" An example for a vimrc file.
+"
+" Maintainer:	Bram Moolenaar <Bram@vim.org>
+" Last change:	2000 Mar 29
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"	      for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
+
 let mapleader = ","
 
-"turn off vi compatability
-set nocp
-filetype plugin on
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
 
-"backspace needs to backspace
-set backspace=indent,eol,start
+filetype indent on
 
-"indent
-set autoindent
+set t_Co=256
+set nowrap         " Don't wrap long lines
+set autoindent     " Do auto-indenting
 set smartindent
-
-"set up tabs
-set tabstop=4
+set nocindent      " But don't do wacky C style indenting
+"set bs=2		   " allow backspacing over everything in insert mode
+set showmatch      " always set showmatch on
+set expandtab      " Use spaces instead of tabs
+set softtabstop=4  " Use spaces instead of tabs
 set shiftwidth=4
-set expandtab
+set tabstop=4      " If you insist on using tabs, use the same tabstop
+"set backup		   " keep a backup file (defaults to .filename~)
+set viminfo='20,\"50  " read/write a .viminfo file, don't store more than 50 lines of registers
+set history=50     " keep 50 lines of command line history
+set undolevels=500
+set ruler          " show the cursor position all the time
+set autowrite
 
-" I always screw this up
+" These are supposed to redraw the terminal on vim exit.
+" For csh you might want to try `setenv PAGER 'less'` so the vim drawing is removed as well
+set t_ti=[?1049h
+set t_te=[?1049l
+
+" Allow human millisecond failure of shift key lift-off
 command! W w
 command! Q q
 
-"DOS style completion is stupid, this makes it like bash
+" Unix style completion
 set wildmode=longest,list,full
 set wildmenu
 
-"highlight/search options
-    "highlight searches
-    set hlsearch
-    "tap space to clear search highight
-    noremap <silent> <Space> :silent noh<CR>
-    "search as I type
-    set incsearch
-    "syntax highlighting
-    syn on
-    "colorscheme of the day
-    "colorscheme wombat
-    "show extra whitespace
-    "hi WhitespaceEOL ctermbg=lightgray guibg=lightgray
-    "au BufEnter * let w:m1=matchadd('WhitespaceEOL', '\s\+$', 10)
-    "remove extra whitespace
-    map <silent> <Leader>s :%s/\s\+$//<CR>
-    "show tabs
-    hi BadTabs ctermbg=darkred guibg=darkred
-    "au BufEnter * let w:m2=matchadd('BadTabs', '\t', 10)
-    "set color of matching brace/bracket/parenthesis
-    hi MatchParen ctermbg=blue guibg=lightblue
-
-"other ui options
-    "set up status line
-    set statusline=%F%m%r%h%w\ %=[Type=%Y]\ [POS=%l,%v][%p%%]\ [LEN=%L]
-    "always show status line
-    set laststatus=2
-    set encoding=utf-8
-    set t_Co=256
-    "show line numbers
-    "set number
-    set autowrite
-    "i like to undo
-    set undolevels=500
-    "show filename in tabs
-    set guitablabel=%t
-    "bells are for the weak
-    set noerrorbells
-    set novisualbell
-    "wrapping is annoying
-    "set nowrap
-
-if has('gui_running')
-    "toolbar is a waste
-    set guioptions-=T
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+  noremap <silent> <Space> :silent noh<CR>
 endif
 
-",v to open up .vimrc in top window, ,V to resource it
-map <Leader>v :sp ~/.vimrc<CR><C-W>
-map <silent> <Leader>V :source ~/.vimrc<CR><C-W><CR>:exe ":echo 'gvimrc reloaded'"<CR>
-"map <Leader>nt :NERDTree<CR>
-"map <Leader>a :AV<CR>
-"
-"because I hit this shit every fucking time and it's annoying
-map <C-W>o :echo "Disabled in vimrc!"<CR>
-map <C-W><C-O> :echo "Disabled in vimrc!"<CR>
-   
-"hi Search ctermbg=darkgrey ctermfg=white
-hi Search ctermbg=yellow ctermfg=white
+" Search as you type
+set incsearch
 
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+if has("autocmd")
+    autocmd BufNewFile,BufRead Makefile set noexpandtab " Makefiles ensure that we don't expand tabs since tabs are special
+endif
 
-"let g:Powerline_symbols = 'fancy'
+" Highlight lines not matching style
+if &t_Co > 2 || has("gui_running")
+    hi BadTabs ctermbg=darkred guibg=darkred
+    hi MatchParen ctermbg=blue guibg=lightblue
+    hi Search ctermbg=lightblue ctermfg=white
+endif
+
+" Always show status bar
+set statusline=%F%m%r%h%w\ %=[Type=%Y]\ [POS=%l,%v][%p%%]\ [LEN=%L]
+set laststatus=2
+set encoding=utf-8
+
+" Disable bells
+set noerrorbells
+set novisualbell
+
+" Disable commands that I probably don't want to do ever
+map <C-W>o :echo "Disabled."<CR>
+map <C-W><C-O> :echo "Disabled."<CR>
+
+
+" lhs comments -- select a range then hit ,# to insert hash comments
+" or ,/ for // comments, or ,c to clear comments.
+map ,# :s/^/#/<CR> <Esc>:nohlsearch <CR>
+map ,/ :s/^/\/\//<CR> <Esc>:nohlsearch <CR>
+map ,c :s/^\/\/\\|^--\\|^> \\|^[#"%!;]//<CR> <Esc>:nohlsearch<CR>
+
+" wrapping comments -- select a range then hit ,* to put  /* */ around
+" selection, or ,d to clear them
+map ,* :s/^\(.*\)$/\/\* \1 \*\//<CR> <Esc>:nohlsearch<CR>
+map ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR> <Esc>:nohlsearch<CR>
+
+" to clear hlsearch -- hit ,h to clear highlighting from last search
+map ,h :nohlsearch <CR>
+
+" disable Ex mode
+nnoremap Q <nop>
+
+nnoremap n nzz
+nnoremap N Nzz
+
+" nice look
+colorscheme wombat256
+
+" Fill non-text space with theme background rather than system default
+set t_ut=
+
+" Line numbers; always show 6 spaces for 1000-99999 line files
+set nu
+set nuw=6
+"au BufEnter * :set rnu
+"au BufLeave * :set nu
+"au WinEnter * :set rnu
+"au WinLeave * :set nu
+"au InsertEnter * :set nu
+"au InsertLeave * :set rnu
+"au FocusLost * :set nu
+"au FocusGained * :set rnu
+
+" reduce rage-inducing unindenting of python and R comments
+:inoremap # X<BS>#
+
+" highlight SLICC code and OpenCL as C
+au BufNewFile,BufRead *.sm set filetype=c
+au BufNewFile,BufRead *.slicc set filetype=c
+au BufNewFile,BufRead *.cl set filetype=c
+
