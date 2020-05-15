@@ -1,14 +1,3 @@
-" An example for a vimrc file.
-"
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2000 Mar 29
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"	    for OpenVMS:  sys$login:.vimrc
-
 let mapleader = ","
 
 " Use Vim settings, rather then Vi settings (much better!).
@@ -24,10 +13,10 @@ set smartindent
 set nocindent      " But don't do wacky C style indenting
 "set bs=2		   " allow backspacing over everything in insert mode
 set showmatch      " always set showmatch on
-set expandtab      " Use spaces instead of tabs
 set softtabstop=4  " Use spaces instead of tabs
-set shiftwidth=4
 set tabstop=4      " If you insist on using tabs, use the same tabstop
+set shiftwidth=4
+set expandtab      " Use spaces instead of tabs
 "set backup		   " keep a backup file (defaults to .filename~)
 set viminfo='20,\"50  " read/write a .viminfo file, don't store more than 50 lines of registers
 set history=50     " keep 50 lines of command line history
@@ -129,4 +118,7 @@ set nuw=6
 au BufNewFile,BufRead *.sm set filetype=c
 au BufNewFile,BufRead *.slicc set filetype=c
 au BufNewFile,BufRead *.cl set filetype=c
+au FileType gitcommit set tw=72
 
+" disable end of line fix
+set nofixendofline

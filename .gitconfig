@@ -1,0 +1,21 @@
+[color]
+    ui = auto
+[user]
+    email = matthew.poremba@amd.com
+    name = Matthew Poremba
+[url "ssh://gerritgitmaster/"]
+    pushInsteadOf = ssh://gerritgit/
+[review "git.amd.com:8080"]
+    username = mporemba
+    uploadtopic = true
+[review "atlvgits01.amd.com:8080"]
+    username = mporemba
+    uploadtopic = true
+[http]
+	cookiefile = /home/mporemba/.gitcookies
+[alias]
+    st = status -uno
+    lg0 = log --pretty=oneline --abbrev-commit
+    lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+    lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+    lg = !"git lg1"

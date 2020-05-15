@@ -1,7 +1,0 @@
-[user]
-	name = Matthew Poremba
-	email = porembam@gmail.com
-[core]
-	editor = vim
-[merge]
-	tool = vimdiff
